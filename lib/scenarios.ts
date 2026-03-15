@@ -183,7 +183,7 @@ export async function POST(req: Request) {
 }
 \`\`\`
 
-Please provide your review.\`,
+Please provide your review.`,
       tokenCount: 4200,
       passoffScore: {
         total: 31,
@@ -254,7 +254,7 @@ const customerSupportTrace: AgentTrace = {
 [User] New ticket from customer: "I was supposed to be downgraded to Pro but I'm still being charged $299/mo for Enterprise."
 [Assistant] I see this is a billing classification issue. Let me look into the account details.
 [User] The triage agent has classified this as Priority 2 -- Billing/Subscription issue. Customer ID: CUST-4821. Account shows Enterprise tier active since Jan 2025. Customer requested downgrade on Feb 15, 2026 via support chat. No record of the downgrade being processed.
-[Assistant] Confirmed. The downgrade request was logged but never executed in the billing system. The customer has been overcharged by $200/mo (Enterprise $299 - Pro $99) for one billing cycle. Root cause: the downgrade workflow failed silently -- no error was raised, but the tier change was not applied.\`,
+[Assistant] Confirmed. The downgrade request was logged but never executed in the billing system. The customer has been overcharged by $200/mo (Enterprise $299 - Pro $99) for one billing cycle. Root cause: the downgrade workflow failed silently -- no error was raised, but the tier change was not applied.`,
       tokenCount: 5200,
       passoffScore: {
         total: 22,
