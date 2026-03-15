@@ -250,11 +250,7 @@ const customerSupportTrace: AgentTrace = {
       id: "triage-to-specialist",
       from: "triage",
       to: "specialist",
-      rawContext: `[System] You are a technical support specialist.
-[User] New ticket from customer: "I was supposed to be downgraded to Pro but I'm still being charged $299/mo for Enterprise."
-[Assistant] I see this is a billing classification issue. Let me look into the account details.
-[User] The triage agent has classified this as Priority 2 -- Billing/Subscription issue. Customer ID: CUST-4821. Account shows Enterprise tier active since Jan 2025. Customer requested downgrade on Feb 15, 2026 via support chat. No record of the downgrade being processed.
-[Assistant] Confirmed. The downgrade request was logged but never executed in the billing system. The customer has been overcharged by $200/mo (Enterprise $299 - Pro $99) for one billing cycle. Root cause: the downgrade workflow failed silently -- no error was raised, but the tier change was not applied.`,
+      rawContext: "[System] You are a technical support specialist.\n[User] New ticket from customer: \"I was supposed to be downgraded to Pro but I'm still being charged $299/mo for Enterprise.\"\n[Assistant] I see this is a billing classification issue. Let me look into the account details.\n[User] The triage agent has classified this as Priority 2 -- Billing/Subscription issue. Customer ID: CUST-4821. Account shows Enterprise tier active since Jan 2025. Customer requested downgrade on Feb 15, 2026 via support chat. No record of the downgrade being processed.\n[Assistant] Confirmed. The downgrade request was logged but never executed in the billing system. The customer has been overcharged by $200/mo (Enterprise $299 - Pro $99) for one billing cycle. Root cause: the downgrade workflow failed silently -- no error was raised, but the tier change was not applied.",
       tokenCount: 5200,
       passoffScore: {
         total: 22,
@@ -270,18 +266,7 @@ const customerSupportTrace: AgentTrace = {
       id: "specialist-to-billing",
       from: "specialist",
       to: "billing",
-      rawContext: `[System] You are a billing operations agent.
-[User] Handle this billing case.
-[Assistant] Ready to process.
-[User] Conversation history from triage and specialist:
-
-Customer CUST-4821 reported being charged Enterprise rate after requesting downgrade to Pro. Triage classified as P2 billing issue. Specialist confirmed the downgrade request from Feb 15 was logged but never processed due to a silent workflow failure. Customer overcharged $200 for the March billing cycle. The specialist recommends a refund of $200 and immediate tier change to Pro at $99/mo.
-
-Previous conversation about the customer's history: They've been a customer since 2024, originally on Starter, upgraded to Enterprise in Jan 2025 for a large project, and requested downgrade when the project completed. They have 3 team members on the account. Their payment method is a corporate Visa ending in 4242. Last 6 invoices are attached.
-
-Additional context from the triage agent's research: checked the downgrade automation logs and found the webhook to the payment processor timed out at 30s. The retry queue had the job marked as "pending" but the scheduler skip threshold was set to 24h, so it was never retried before the next billing cycle.
-
-Please process the refund and correct the subscription tier.`,
+      rawContext: "[System] You are a billing operations agent.\n[User] Handle this billing case.\n[Assistant] Ready to process.\n[User] Conversation history from triage and specialist:\n\nCustomer CUST-4821 reported being charged Enterprise rate after requesting downgrade to Pro. Triage classified as P2 billing issue. Specialist confirmed the downgrade request from Feb 15 was logged but never processed due to a silent workflow failure. Customer overcharged $200 for the March billing cycle. The specialist recommends a refund of $200 and immediate tier change to Pro at $99/mo.\n\nPrevious conversation about the customer's history: They've been a customer since 2024, originally on Starter, upgraded to Enterprise in Jan 2025 for a large project, and requested downgrade when the project completed. They have 3 team members on the account. Their payment method is a corporate Visa ending in 4242. Last 6 invoices are attached.\n\nAdditional context from the triage agent's research: checked the downgrade automation logs and found the webhook to the payment processor timed out at 30s. The retry queue had the job marked as \"pending\" but the scheduler skip threshold was set to 24h, so it was never retried before the next billing cycle.\n\nPlease process the refund and correct the subscription tier.",
       tokenCount: 5200,
       passoffBriefing: {
         mission:
