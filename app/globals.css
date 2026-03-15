@@ -49,28 +49,28 @@
 }
 
 .dark {
-  --background: hsl(228 22% 9%);
-  --foreground: hsl(220 20% 94%);
-  --card: hsl(228 20% 13%);
-  --card-foreground: hsl(220 20% 94%);
-  --popover: hsl(228 20% 11%);
-  --popover-foreground: hsl(220 20% 94%);
-  --primary: hsl(240 70% 68%);
-  --primary-foreground: hsl(0 0% 100%);
+  --background: #0a0a0a;
+  --foreground: #e5e5e5;
+  --card: #111111;
+  --card-foreground: #e5e5e5;
+  --popover: #0e0e0e;
+  --popover-foreground: #e5e5e5;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
   --secondary: hsl(228 16% 20%);
-  --secondary-foreground: hsl(220 20% 94%);
+  --secondary-foreground: #e5e5e5;
   --muted: hsl(228 16% 17%);
   --muted-foreground: hsl(220 12% 55%);
-  --accent: hsl(240 60% 75%);
-  --accent-foreground: hsl(220 20% 94%);
+  --accent: #6366f1;
+  --accent-foreground: #ffffff;
   --destructive: hsl(0 65% 58%);
   --destructive-foreground: hsl(0 0% 100%);
   --success: hsl(152 55% 48%);
   --warning: hsl(38 88% 56%);
   --info: hsl(217 85% 65%);
-  --border: hsl(228 16% 22%);
-  --input: hsl(228 18% 17%);
-  --ring: hsl(240 70% 68%);
+  --border: hsl(0 0% 18%);
+  --input: hsl(0 0% 12%);
+  --ring: #6366f1;
 
   --score-green: #22C55E;
   --score-yellow: #EAB308;
@@ -152,6 +152,16 @@
   html {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+  }
+  button:not(.touch-target-sm):not([data-state]),
+  [role="button"]:not(.touch-target-sm) {
+    min-height: 44px;
+  }
+  .touch-target-sm {
+    min-height: 36px;
+  }
+  button, a {
+    touch-action: manipulation;
   }
 }
 

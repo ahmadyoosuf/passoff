@@ -67,7 +67,7 @@ export default function OutputCompare({ result }: { result: PipelineRun }) {
         <span className="text-sm font-sans text-foreground">Writer Output</span>
       </div>
 
-      <div className={cn("grid gap-4", isAB ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1")}>
+      <div className={cn("grid gap-4", isAB ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
         {showRaw && result.writerOutputRaw && (
           <div className="space-y-3">
             <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">

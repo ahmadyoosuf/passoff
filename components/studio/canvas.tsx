@@ -25,7 +25,7 @@ function NodeCard({
   return (
     <div
       className={cn(
-        "rounded-lg border p-4 w-56 bg-card text-card-foreground transition-all",
+        "rounded-lg border p-4 w-full max-w-sm bg-card text-card-foreground transition-all",
         status === "failed"
           ? "border-score-red/50"
           : status === "running"
@@ -89,7 +89,7 @@ function EdgeLine({
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-2 py-2 px-3 rounded-md transition-all cursor-pointer",
+        "flex items-center gap-2 py-3 px-3 rounded-md transition-all cursor-pointer w-full max-w-sm touch-target-sm",
         "hover:bg-muted/30",
         isSelected && "bg-primary/5 ring-1 ring-primary/20"
       )}

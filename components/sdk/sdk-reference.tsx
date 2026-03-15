@@ -166,7 +166,7 @@ export default function SDKReference() {
   return (
     <div className="max-w-4xl mx-auto p-4 lg:p-6 space-y-8">
       <div>
-        <h1 className="font-sans text-xl font-semibold text-foreground text-balance">
+        <h1 className="font-sans text-lg sm:text-xl font-semibold text-foreground text-balance">
           SDK Reference
         </h1>
         <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
@@ -188,7 +188,7 @@ export default function SDKReference() {
         <h2 className="font-sans text-base font-semibold text-foreground">API Functions</h2>
 
         <div className="space-y-3">
-          <h3 className="font-mono text-sm text-foreground">
+          <h3 className="font-mono text-xs sm:text-sm text-foreground break-all">
             generatePB(session: AgentSession): Promise{"<PassoffBriefing>"}
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -198,7 +198,7 @@ export default function SDKReference() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="font-mono text-sm text-foreground">
+          <h3 className="font-mono text-xs sm:text-sm text-foreground break-all">
             scorePB(pb: PassoffBriefing, session?: AgentSession): PassoffScore
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -208,7 +208,7 @@ export default function SDKReference() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="font-mono text-sm text-foreground">
+          <h3 className="font-mono text-xs sm:text-sm text-foreground break-all">
             formatForAgent(pb: PassoffBriefing, role: string): string
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -218,7 +218,7 @@ export default function SDKReference() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="font-mono text-sm text-foreground">
+          <h3 className="font-mono text-xs sm:text-sm text-foreground break-all">
             diff(raw: string, pb: PassoffBriefing): HandoffDiff
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
