@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { getScoreLabel } from "@/lib/rubric";
 import type { AgentTrace, HandoffEdge } from "@/lib/types";
-import { AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
 interface CanvasProps {
   trace: AgentTrace;
@@ -11,51 +11,38 @@ interface CanvasProps {
   onSelectEdge: (edgeId: string) => void;
 }
 
-function NodeCard({
+function AgentNode({
   name,
   role,
-  taskSummary,
   status,
 }: {
   name: string;
   role: string;
-  taskSummary: string;
   status: "completed" | "failed" | "running";
 }) {
   return (
     <div
       className={cn(
-        "rounded-lg border p-4 w-full max-w-sm bg-card text-card-foreground transition-all",
+        "relative rounded-lg border px-4 py-3 bg-card text-card-foreground",
         status === "failed"
-          ? "border-score-red/50"
-          : status === "running"
-          ? "border-score-yellow/50"
+          ? "border-score-red/40"
           : "border-border/30"
       )}
     >
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-sans text-sm font-semibold text-foreground">
-          {name}
-        </span>
-        {status === "failed" && (
-          <AlertTriangle className="h-4 w-4 text-score-red" />
+      <div className="flex items-center gap-2">
+        {status === "failed" ? (
+          <AlertTriangle className="h-3.5 w-3.5 text-score-red shrink-0" />
+        ) : (
+          <CheckCircle2 className="h-3.5 w-3.5 text-score-green shrink-0" />
         )}
-        {status === "completed" && (
-          <CheckCircle2 className="h-4 w-4 text-score-green" />
-        )}
-        {status === "running" && (
-          <Loader2 className="h-4 w-4 text-score-yellow animate-spin" />
-        )}
+        <span className="font-sans text-sm font-semibold text-foreground">{name}</span>
       </div>
-      <p className="text-xs text-muted-foreground font-mono mb-1">{role}</p>
-      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-        {taskSummary}
-      </p>
+      <p className="text-xs text-muted-foreground font-mono mt-1">{role}</p>
     </div>
   );
 }
 
-function EdgeLine({
+function EdgeConnector({
   edge,
   isSelected,
   onClick,
@@ -65,76 +52,63 @@ function EdgeLine({
   onClick: () => void;
 }) {
   const score = edge.passoffScore?.total;
-  const scoreColor = score !== undefined ? getScoreLabel(score) : null;
+  const label = score !== undefined ? getScoreLabel(score) : null;
 
-  const colorMap = {
+  const lineColor = {
     green: "bg-score-green",
     yellow: "bg-score-yellow",
     red: "bg-score-red",
   };
-
-  const borderColorMap = {
-    green: "border-score-green",
-    yellow: "border-score-yellow",
-    red: "border-score-red",
+  const badgeBorder = {
+    green: "border-score-green text-score-green",
+    yellow: "border-score-yellow text-score-yellow",
+    red: "border-score-red text-score-red",
   };
 
-  const textColorMap = {
-    green: "text-score-green",
-    yellow: "text-score-yellow",
-    red: "text-score-red",
-  };
+  const isRed = label === "red";
 
   return (
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-2 py-3 px-3 rounded-md transition-all cursor-pointer w-full max-w-sm touch-target-sm",
-        "hover:bg-muted/30",
-        isSelected && "bg-primary/5 ring-1 ring-primary/20"
+        "relative flex items-center justify-center w-full py-1 group cursor-pointer",
+        isSelected && "z-10"
       )}
-      aria-label={`Handoff edge from ${edge.from} to ${edge.to}${
-        score !== undefined ? `, score ${score}` : ""
-      }`}
+      aria-label={`Handoff from ${edge.from} to ${edge.to}${score !== undefined ? `, score ${score}` : ""}`}
     >
-      <div className="flex items-center gap-1 flex-1">
+      {/* Vertical colored line */}
+      <div className="absolute inset-0 flex justify-center">
         <div
           className={cn(
-            "h-0.5 flex-1 rounded",
-            scoreColor ? colorMap[scoreColor] : "bg-border"
+            "w-0.5 h-full transition-all",
+            label ? lineColor[label] : "bg-border/50",
+            isRed && "w-1 shadow-[0_0_8px_rgba(239,68,68,0.4)]",
+            isSelected && "w-1"
           )}
         />
+      </div>
+
+      {/* Score badge */}
+      <div
+        className={cn(
+          "relative z-10 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-mono font-semibold transition-all",
+          "bg-background",
+          label ? badgeBorder[label] : "border-border/40 text-muted-foreground",
+          isRed && "shadow-[0_0_12px_rgba(239,68,68,0.25)] border-2",
+          isSelected && "ring-2 ring-primary/30 bg-primary/5",
+          "group-hover:scale-105"
+        )}
+      >
+        {score !== undefined ? score : "--"}
         <svg
-          width="8"
-          height="12"
-          viewBox="0 0 8 12"
-          className={cn(
-            scoreColor
-              ? textColorMap[scoreColor]
-              : "text-muted-foreground"
-          )}
+          width="6"
+          height="10"
+          viewBox="0 0 6 10"
+          className="opacity-50"
         >
-          <path d="M1 1L6 6L1 11" stroke="currentColor" strokeWidth="1.5" fill="none" />
+          <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" fill="none" />
         </svg>
       </div>
-      {score !== undefined && (
-        <span
-          className={cn(
-            "font-mono text-xs font-semibold px-2 py-0.5 rounded-full border",
-            scoreColor && borderColorMap[scoreColor],
-            scoreColor === "green" && "text-score-green",
-            scoreColor === "yellow" && "text-score-yellow",
-            scoreColor === "red" && "text-score-red"
-          )}
-        >
-          {score}
-        </span>
-      )}
-      {score === undefined && (
-        <span className="font-mono text-xs text-muted-foreground px-2 py-0.5 rounded-full border border-border/30">
-          --
-        </span>
-      )}
     </button>
   );
 }
@@ -144,63 +118,63 @@ export default function Canvas({
   selectedEdgeId,
   onSelectEdge,
 }: CanvasProps) {
-  // Build adjacency: for each edge, find source and target nodes
   const nodeMap = new Map(trace.nodes.map((n) => [n.id, n]));
 
+  // Build the linear flow: node -> edge -> node -> edge -> node
+  const renderedNodes = new Set<string>();
+  const elements: React.ReactNode[] = [];
+
+  trace.edges.forEach((edge, idx) => {
+    const source = nodeMap.get(edge.from);
+    const target = nodeMap.get(edge.to);
+    if (!source || !target) return;
+
+    if (!renderedNodes.has(edge.from)) {
+      renderedNodes.add(edge.from);
+      elements.push(
+        <AgentNode
+          key={`node-${edge.from}`}
+          name={source.name}
+          role={source.role}
+          status={source.status}
+        />
+      );
+    }
+
+    elements.push(
+      <EdgeConnector
+        key={`edge-${edge.id}`}
+        edge={edge}
+        isSelected={selectedEdgeId === edge.id}
+        onClick={() => onSelectEdge(edge.id)}
+      />
+    );
+
+    if (!renderedNodes.has(edge.to)) {
+      renderedNodes.add(edge.to);
+      elements.push(
+        <AgentNode
+          key={`node-${edge.to}`}
+          name={target.name}
+          role={target.role}
+          status={target.status}
+        />
+      );
+    }
+  });
+
   return (
-    <div className="p-4 lg:p-6">
-      <div className="mb-4">
-        <h2 className="font-sans text-lg font-semibold text-foreground text-balance">
-          {trace.name}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-          {trace.description}
-        </p>
-        <div className="flex items-center gap-2 mt-2">
-          <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-score-red/10 text-score-red border border-score-red/20">
-            MAST: {trace.mastFailureMode}
-          </span>
-          <span className="font-mono text-xs text-muted-foreground">
-            {trace.mastPercentage} of failures
-          </span>
-        </div>
+    <div className="flex flex-col items-center px-4 py-6 lg:px-6 lg:py-8">
+      {/* MAST badge */}
+      <div className="flex items-center gap-2 mb-6 self-start">
+        <span className="font-mono text-[11px] px-2 py-1 rounded-md bg-score-red/10 text-score-red border border-score-red/20">
+          MAST: {trace.mastFailureMode} ({trace.mastPercentage})
+        </span>
       </div>
 
-      {/* Node-edge graph rendered as a vertical flow */}
-      <div className="flex flex-col gap-2">
-        {trace.edges.map((edge, idx) => {
-          const sourceNode = nodeMap.get(edge.from);
-          const targetNode = nodeMap.get(edge.to);
-          if (!sourceNode || !targetNode) return null;
-
-          // Track which nodes have been rendered
-          const previousTargets = trace.edges.slice(0, idx).map((e) => e.to);
-          const showSource = idx === 0 || !previousTargets.includes(edge.from);
-
-          return (
-            <div key={edge.id} className="flex flex-col gap-2">
-              {showSource && (
-                <NodeCard
-                  name={sourceNode.name}
-                  role={sourceNode.role}
-                  taskSummary={sourceNode.taskSummary}
-                  status={sourceNode.status}
-                />
-              )}
-              <EdgeLine
-                edge={edge}
-                isSelected={selectedEdgeId === edge.id}
-                onClick={() => onSelectEdge(edge.id)}
-              />
-              <NodeCard
-                name={targetNode.name}
-                role={targetNode.role}
-                taskSummary={targetNode.taskSummary}
-                status={targetNode.status}
-              />
-            </div>
-          );
-        })}
+      {/* Graph */}
+      <div className="flex flex-col items-stretch w-full max-w-xs">
+        {elements}
       </div>
     </div>
   );
