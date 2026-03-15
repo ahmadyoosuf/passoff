@@ -17,9 +17,11 @@ export default function Home() {
       <Hero />
       <Stats />
       <Features />
+      <NonExistentComponent />
       <Pricing />
       <CTA />
       <Footer />
+      <p>{undefinedVariable}</p>
     </main>
   );
 }
